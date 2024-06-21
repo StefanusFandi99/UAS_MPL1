@@ -5,10 +5,10 @@ class Pengaturan extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pengaturan'),
+        title: const Text('Pengaturan'),
         backgroundColor: Colors.grey,
       ),
-      body: Center(
+      body: const Center(
         child: Text('Pengaturan Content Goes Here'),
       ),
     );

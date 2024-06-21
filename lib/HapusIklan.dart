@@ -9,7 +9,7 @@ class HapusIklan extends StatelessWidget {
         backgroundColor: Colors.grey,
       ),
       body: Center(
-        child: Text('Remove Ads Content Goes Here'),
+        child: Text('isine opo'),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'Pengaturan.dart';
 import 'HapusIklan.dart';
 import 'KiatPenggunaan.dart';
 import 'Bantuan.dart';
+import 'MataUang.dart'; // Import the new MataUang page
 
 void main() {
   runApp(CalculatorApp());
@@ -14,7 +15,12 @@ class CalculatorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Calculator',
-      theme: ThemeData(scaffoldBackgroundColor: Color.fromARGB(255, 158, 25, 25)),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Color.fromARGB(255, 255, 255, 255),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(color: Colors.white), // Set default text color to white
+        ),
+      ),
       home: Calculator(),
       debugShowCheckedModeBanner: false, // Hide the debug banner
     );
@@ -26,9 +32,8 @@ class Calculator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kalkulator'),
-        backgroundColor:
-            Colors.grey, // Set the background color of the AppBar to grey
+        title: Text('Kalkulator', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 57, 57, 57), // Set the background color of the AppBar to grey
         actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -39,24 +44,25 @@ class Calculator extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => Bantuan()),
                 );
               }
-              ;
-              if (value == 'Hapus Iklan')
+              if (value == 'Hapus Iklan') {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => HapusIklan()),
                 );
-              if (value == 'Pengaturan')
+              }
+              if (value == 'Pengaturan') {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Pengaturan()),
                 );
+              }
             },
             itemBuilder: (BuildContext context) {
               return {'Bantuan', 'Hapus Iklan', 'Pengaturan'}
                   .map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
-                  child: Text(choice),
+                  child: Text(choice, style: TextStyle(color: Colors.black)), // Popup menu text remains black for readability
                 );
               }).toList();
             },
@@ -68,7 +74,7 @@ class Calculator extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             Container(
-              color: Color.fromARGB(255, 46, 46, 46),
+              color: Color.fromARGB(255, 57, 55, 55),
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,8 +127,7 @@ class Calculator extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => KiatPenggunaan()),
+                        MaterialPageRoute(builder: (context) => KiatPenggunaan()),
                       );
                     },
                     child: Row(
@@ -143,8 +148,7 @@ class Calculator extends StatelessWidget {
               ),
             ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Text(
                 'Favorit',
                 style: TextStyle(
@@ -155,36 +159,38 @@ class Calculator extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Text('Kalkulator'),
+              title: Text('Kalkulator', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0))),
               dense: true,
               onTap: () {
                 Navigator.pop(context); // close the drawer
               },
             ),
             ListTile(
-              title: Text('Mata Uang'),
+              title: Text('Mata Uang', style: TextStyle(color: const Color.fromARGB(255, 17, 17, 17))),
               dense: true,
               onTap: () {
-                // You can add navigation to another screen if needed
-                Navigator.pop(context); // close the drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MataUang()),
+                ); // Navigate to MataUang page
               },
             ),
             ListTile(
-              title: Text('Satuan'), // New option added
-              dense: true,
-              onTap: () {
-                Navigator.pop(context); // close the drawer
-              },
-            ),
-            ListTile(
-              title: Text('Diskon'), // New option added
+              title: Text('Satuan', style: TextStyle(color: const Color.fromARGB(255, 37, 37, 37))), // New option added
               dense: true,
               onTap: () {
                 Navigator.pop(context); // close the drawer
               },
             ),
             ListTile(
-              title: Text('Pinjaman'), // New option added
+              title: Text('Diskon', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0))), // New option added
+              dense: true,
+              onTap: () {
+                Navigator.pop(context); // close the drawer
+              },
+            ),
+            ListTile(
+              title: Text('Pinjaman', style: TextStyle(color: const Color.fromARGB(255, 0, 0, 0))), // New option added
               dense: true,
               onTap: () {
                 Navigator.pop(context); // close the drawer

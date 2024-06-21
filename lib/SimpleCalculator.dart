@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'dart:async';
 
 class SimpleCalculator extends StatefulWidget {
   @override
@@ -7,74 +8,179 @@ class SimpleCalculator extends StatefulWidget {
 }
 
 class _SimpleCalculatorState extends State<SimpleCalculator> {
-  String displayText = "0";
-  String equation = "0";
-  double displayFontSize = 48.0;
+  String equation = "";
+  String result = "";
+  String expression = "";
+  double fontSize = 50.0;
+  bool showCursor = true;
+  Timer? cursorTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    startCursorBlinking();
+  }
+
+  @override
+  void dispose() {
+    cursorTimer?.cancel();
+    super.dispose();
+  }
+
+  void startCursorBlinking() {
+    cursorTimer = Timer.periodic(Duration(milliseconds: 500), (timer) {
+      setState(() {
+        showCursor = !showCursor;
+      });
+    });
+  }
+
+  String getEquationWithCursor() {
+    if (equation.isEmpty && result.isEmpty) {
+      return showCursor ? "|" : "";
+    } else {
+      return showCursor ? equation + "|" : equation;
+    }
+  }
 
   buttonPressed(String buttonText) {
     setState(() {
       if (buttonText == "C") {
-        equation = "0";
-        displayText = "0";
+        equation = "";
+        result = "";
+        fontSize = 50.0;
       } else if (buttonText == "⌫") {
-        equation = equation.substring(0, equation.length - 1);
-        if (equation == "") {
-          equation = "0";
+        fontSize = 50.0;
+        if (equation.isNotEmpty) {
+          equation = equation.substring(0, equation.length - 1);
         }
-        displayText = equation;
       } else if (buttonText == "=") {
-        String expression = equation;
+        fontSize = 50.0;
+        expression = equation;
         expression = expression.replaceAll('x', '*');
         expression = expression.replaceAll('÷', '/');
-
         try {
           Parser p = Parser();
           Expression exp = p.parse(expression);
-
           ContextModel cm = ContextModel();
-          displayText = '${exp.evaluate(EvaluationType.REAL, cm)}';
+          double eval = exp.evaluate(EvaluationType.REAL, cm);
+          result = eval.toString();
+          if (eval == eval.toInt()) {
+            result = eval.toInt().toString();
+          }
+          equation = result;
         } catch (e) {
-          displayText = "Error";
+          result = "Error";
         }
+      } else if (buttonText == "()") {
+        fontSize = 50.0;
+        if (equation.endsWith('(') || equation.isEmpty) {
+          equation += "(";
+        } else if (equation.contains("(") && !equation.contains(")")) {
+          equation += ")";
+        } else {
+          equation += "(";
+        }
+      } else if (buttonText == "...") {
+        showMoreOptionsDialog();
       } else {
-        if (equation == "0") {
+        fontSize = 50.0;
+        if (equation.isEmpty) {
           equation = buttonText;
         } else {
-          equation = equation + buttonText;
+          equation += buttonText;
         }
-        displayText = equation;
       }
     });
   }
 
-  Widget buildButton(String buttonText, double buttonSize, Color buttonColor, Color textColor) {
-    return Container(
-      margin: EdgeInsets.all(2.0), // Adjust margin to make background visible
-      height: MediaQuery.of(context).size.width * 0.075 * buttonSize, // Adjust button size to be smaller
-      width: MediaQuery.of(context).size.width * 0.075 * buttonSize, // Adjust button size to be smaller
-      decoration: BoxDecoration(
-        color: buttonColor,
-        borderRadius: BorderRadius.circular(10.0), // Add rounded corners
-      ),
-      child: TextButton(
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.all(12.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Add rounded corners here
-            side: BorderSide(
-              color: Color.fromARGB(255, 186, 183, 183),
-              width: 2,
-              style: BorderStyle.solid,
+  void showMoreOptionsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Fungsi Ilmiah"),
+          content: SingleChildScrollView(
+            child: Container(
+              width: double.maxFinite,
+              child: GridView.count(
+                crossAxisCount: 3,
+                crossAxisSpacing: 5.0,
+                mainAxisSpacing: 5.0,
+                shrinkWrap: true,
+                children: <String>[
+                  "π", "e", "φ",
+                  "log", "ln", "^",
+                  "√", "∛", "|x|",
+                  "sin", "cos", "tan",
+                  "sin⁻¹", "cos⁻¹", "tan⁻¹",
+                  "sinh", "cosh", "tanh",
+                  "sinh⁻¹", "cosh⁻¹", "tanh⁻¹",
+                ].map((String value) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (equation.isEmpty) {
+                          equation = value;
+                        } else {
+                          equation += value;
+                        }
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: Colors.white,
+                      ),
+                      child: Center(
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ),
-        ),
-        onPressed: () => buttonPressed(buttonText),
-        child: Text(
-          buttonText,
-          style: TextStyle(
-            fontSize: 22.0,
-            fontWeight: FontWeight.bold, // Set font weight to bold
-            color: textColor,
+          actions: [
+            TextButton(
+              child: Text("BATAL"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildButton(String buttonText, Color buttonColor, Color textColor) {
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.all(2.0),
+        child: TextButton(
+          style: TextButton.styleFrom(
+            backgroundColor: buttonColor,
+            padding: EdgeInsets.all(18.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3.0)
+            ),
+          ),
+          onPressed: () => buttonPressed(buttonText),
+          child: Text(
+            buttonText,
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: textColor,
+            ),
           ),
         ),
       ),
@@ -83,74 +189,100 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey, // Set the background color to grey
-      child: Column(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.centerRight,
-            padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-            child: Text(displayText, style: TextStyle(fontSize: displayFontSize)),
-          ),
-          Expanded(
-            child: Divider(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(color: Colors.black),
-                width: MediaQuery.of(context).size.width * 1, // Adjust container width
-                child: Table(
-                  children: [
-                    TableRow(children: [
-                      buildButton("C", 1, Colors.white, const Color.fromARGB(255, 10, 47, 111)),
-                      buildButton("⌫", 1, Colors.white, const Color.fromARGB(255, 10, 47, 111)),
-                      buildButton("x", 1, Colors.white, const Color.fromARGB(255, 10, 47, 111)),
-                      buildButton("÷", 1, Colors.white, const Color.fromARGB(255, 10, 47, 111)),
-                    ]),
-                    TableRow(children: [
-                      buildButton("7", 1, Colors.white, Colors.black),
-                      buildButton("8", 1, Colors.white, Colors.black),
-                      buildButton("9", 1, Colors.white, Colors.black),
-                      buildButton("x", 1, Colors.white, const Color.fromARGB(255, 10, 47, 111)),
-                    ]),
-                    TableRow(children: [
-                      buildButton("4", 1, Colors.white, Colors.black),
-                      buildButton("5", 1, Colors.white, Colors.black),
-                      buildButton("6", 1, Colors.white, Colors.black),
-                      buildButton("-", 1, Colors.white, const Color.fromARGB(255, 10, 47, 111)),
-                    ]),
-                    TableRow(children: [
-                      buildButton("1", 1, Colors.white, Colors.black),
-                      buildButton("2", 1, Colors.white, Colors.black),
-                      buildButton("3", 1, Colors.white, Colors.black),
-                      buildButton("+", 1, Colors.white, const Color.fromARGB(255, 10, 47, 111)),
-                    ]),
-                    TableRow(children: [
-                      buildButton("0", 1, Colors.white, Colors.black),
-                      buildButton("00", 1, Colors.white, Colors.black),
-                      buildButton(",", 1, Colors.white, Colors.black),
-                      buildButton("=", 1, const Color.fromARGB(255, 10, 47, 111), Colors.white),
-                    ])
-                  ],
+    return Scaffold(
+      backgroundColor: Colors.grey,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(6, 7, 6, 0),
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 300,
+              color: Colors.white,
+              padding: const EdgeInsets.fromLTRB(12, 120, 12, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    getEquationWithCursor(),
+                    style: TextStyle(fontSize: fontSize, color: Colors.black),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      buildButton("...", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                      SizedBox(width: 8),
+                      buildButton("^", Colors.white,Color.fromARGB(255, 10, 47, 111)),
+                      buildButton("⌫", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(child: Divider()),
+            Container(
+              height: 400,
+              padding: const EdgeInsets.fromLTRB(0.5, 0, 0.5, 0),
+              color: Colors.grey,
+              child: Table(
+                children: [
+                  TableRow(children: [
+                    buildButton("C", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    buildButton("()", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    buildButton("%", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    buildButton("÷", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                  ]),
+                  TableRow(children: [
+                    buildButton("7", Colors.white, Colors.black),
+                    buildButton("8", Colors.white, Colors.black),
+                    buildButton("9", Colors.white, Colors.black),
+                    buildButton("x", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                  ]),
+                  TableRow(children: [
+                    buildButton("4", Colors.white, Colors.black),
+                    buildButton("5", Colors.white, Colors.black),
+                    buildButton("6", Colors.white, Colors.black),
+                    buildButton("-", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                  ]),
+                  TableRow(children: [
+                    buildButton("1", Colors.white, Colors.black),
+                    buildButton("2", Colors.white, Colors.black),
+                    buildButton("3", Colors.white, Colors.black),
+                    buildButton("+", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                  ]),
+                  TableRow(children: [
+                    buildButton("0", Colors.white, Colors.black),
+                    buildButton("00", Colors.white, Colors.black),
+                    buildButton(",", Colors.white, Colors.black),
+                    buildButton("=", Color.fromARGB(255, 10, 47, 111), Colors.white),
+                  ]),
+                ],
+              ),
+            ),
+            Container(
+              height: 50,
+              padding: const EdgeInsets.fromLTRB(6, 0, 6, 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5.0),
+                  topRight: Radius.circular(5.0),
                 ),
               ),
-            ],
-          ),
-        ],
+              child: Center(
+                child: Image.network(
+                  'https://via.placeholder.com/468x60?text=Ad+Banner',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(
-        title: Text('Simple Calculator'),
-      ),
-      body: SimpleCalculator(),
-    ),
-  ));
-}
+void main() => runApp(MaterialApp(
+  home: SimpleCalculator(),
+));

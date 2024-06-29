@@ -32,7 +32,7 @@ class _MataUangState extends State<MataUang> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mata Uang'),
+        title: Text('Mata Uang', style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromARGB(255, 57, 57, 57),
         actions: [
           IconButton(
@@ -46,11 +46,13 @@ class _MataUangState extends State<MataUang> {
               // Handle menu selections
             },
             itemBuilder: (BuildContext context) {
-              return {'Option 1', 'Option 2', 'Option 3'}
-                  .map((String choice) {
+              return {'Option 1', 'Option 2', 'Option 3'}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
-                  child: Text(choice),
+                  child: Text(
+                    choice,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 );
               }).toList();
             },
@@ -79,7 +81,10 @@ class _MataUangState extends State<MataUang> {
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(
+                          value,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       );
                     }).toList(),
                   ),
@@ -92,6 +97,7 @@ class _MataUangState extends State<MataUang> {
                       hintText: result,
                     ),
                     readOnly: true,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -115,7 +121,10 @@ class _MataUangState extends State<MataUang> {
                     ].map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(
+                          value,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       );
                     }).toList(),
                   ),
@@ -128,6 +137,87 @@ class _MataUangState extends State<MataUang> {
                       hintText: result,
                     ),
                     readOnly: true,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: selectedCurrency2,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedCurrency2 = newValue!;
+                      });
+                    },
+                    items: <String>[
+                      'Rupiah Indonesia',
+                      'Dolar Amerika Serikat',
+                      'Yen Jepang',
+                      'Baht Thailand'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: result,
+                    ),
+                    readOnly: true,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: selectedCurrency2,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedCurrency2 = newValue!;
+                      });
+                    },
+                    items: <String>[
+                      'Rupiah Indonesia',
+                      'Dolar Amerika Serikat',
+                      'Yen Jepang',
+                      'Baht Thailand'
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: result,
+                    ),
+                    readOnly: true,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -148,12 +238,18 @@ class _MataUangState extends State<MataUang> {
                       margin: EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: Colors.grey[300],
+                        color: Colors.white,
                       ),
                       child: Center(
                         child: Text(
                           key,
-                          style: TextStyle(fontSize: 24),
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: key == '←' || key == '+/-' || key == 'C' || key == '='
+                                ? Colors.blue[900]
+                                : Colors.black,
+                          ),
                         ),
                       ),
                     ),
@@ -164,6 +260,7 @@ class _MataUangState extends State<MataUang> {
           ],
         ),
       ),
+      backgroundColor: Colors.grey[300], // background color set to grey
     );
   }
 }

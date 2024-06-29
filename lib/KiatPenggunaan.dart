@@ -11,8 +11,8 @@ class KiatPenggunaan extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text('Bantuan', style: TextStyle(color: Colors.black, fontSize: 24)),
-        backgroundColor: Colors.grey[200],
+        title: Text('Kiat Penggunaan', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 57, 57, 57),
         actions: [
           IconButton(
             icon: Icon(Icons.share),
@@ -35,7 +35,8 @@ class KiatPenggunaan extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage('https://tberna.com/img/slot-gacor.png?v=1708014217&width=1100'), // Ganti dengan URL gambar profil yang sesuai
+                backgroundImage: NetworkImage(
+                    'https://tberna.com/img/slot-gacor.png?v=1708014217&width=1100'), // Ganti dengan URL gambar profil yang sesuai
               ),
               SizedBox(width: 8.0),
               Column(
@@ -43,7 +44,10 @@ class KiatPenggunaan extends StatelessWidget {
                 children: [
                   Text(
                     '3.359.657 sedang bermain',
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
                   ),
                   Text(
                     'Iklan Taufik Sanusi',
@@ -68,7 +72,8 @@ class KiatPenggunaan extends StatelessWidget {
               onPressed: () {
                 // Tambahkan logika untuk SIGN UP
               },
-              child: Text('SIGN UP', style: TextStyle(color: Colors.white, fontSize: 18)),
+              child: Text('SIGN UP',
+                  style: TextStyle(color: Colors.white, fontSize: 18)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),

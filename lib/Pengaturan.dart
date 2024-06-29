@@ -15,12 +15,14 @@ class _PengaturanState extends State<Pengaturan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pengaturan'),
+       title: Text('Pengaturan', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 57, 57, 57),
       ),
       body: ListView(
         children: [
           ListTile(
             title: Text('Umum', style: TextStyle(fontWeight: FontWeight.bold)),
+            
             tileColor: Colors.grey[300],
           ),
           ListTile(

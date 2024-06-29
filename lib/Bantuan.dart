@@ -5,8 +5,8 @@ class Bantuan extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bantuan'),
-        backgroundColor: Colors.grey,
+        title: Text('Bantuan', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 57, 57, 57),
       ),
       body: Center(
         child: Text('Bantuan'),

@@ -11,8 +11,8 @@ class HapusIklan extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text('Langganan premium', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        title: Text('Hapus Iklan', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color.fromARGB(255, 57, 57, 57),
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Padding(

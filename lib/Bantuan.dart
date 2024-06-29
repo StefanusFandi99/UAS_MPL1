@@ -9,7 +9,7 @@ class Bantuan extends StatelessWidget {
         backgroundColor: Colors.grey,
       ),
       body: Center(
-        child: Text('Help Content Goes Here'),
+        child: Text('Bantuan'),
       ),
     );
   }

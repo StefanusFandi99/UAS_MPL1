@@ -161,31 +161,34 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
     );
   }
 
-  Widget buildButton(String buttonText, Color buttonColor, Color textColor) {
-    return Expanded(
-      child: Container(
-        margin: EdgeInsets.all(2.0),
-        child: TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: buttonColor,
-            padding: EdgeInsets.all(18.0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3.0)
-            ),
+  Widget buildButton(String buttonText, Color buttonColor, Color textColor, {double height = 70.0, double width = 70.0, double fontSize = 20.0}) {
+  return SizedBox(
+    width: width,
+    height: height,
+    child: Container(
+      margin: EdgeInsets.all(2.0),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          backgroundColor: buttonColor,
+          padding: EdgeInsets.all(18.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3.0)
           ),
-          onPressed: () => buttonPressed(buttonText),
-          child: Text(
-            buttonText,
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              color: textColor,
-            ),
+        ),
+        onPressed: () => buttonPressed(buttonText),
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+            color: textColor,
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -208,47 +211,48 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
                     style: TextStyle(fontSize: fontSize, color: Colors.black),
                   ),
                   SizedBox(height: 10),
-                  Row(
-                    children: [
-                      buildButton("...", Colors.white, Color.fromARGB(255, 10, 47, 111)),
-                      SizedBox(width: 8),
-                      buildButton("^", Colors.white,Color.fromARGB(255, 10, 47, 111)),
-                      buildButton("⌫", Colors.white, Color.fromARGB(255, 10, 47, 111)),
-                    ],
-                  ),
+                 Row(
+                  children: [
+                    buildButton("...", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    SizedBox(width: 16), // Tambahkan padding antar tombol
+                    buildButton("^", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    SizedBox(width: 16), // Tambahkan padding antar tombol
+                    buildButton("⌫", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                  ],
+                ),
                 ],
               ),
             ),
             Expanded(child: Divider()),
             Container(
               height: 400,
-              padding: const EdgeInsets.fromLTRB(0.5, 0, 0.5, 0),
+              padding: const EdgeInsets.fromLTRB(0.5, 0.2, 0.5, 0),
               color: Colors.grey,
               child: Table(
                 children: [
                   TableRow(children: [
-                    buildButton("C", Colors.white, Color.fromARGB(255, 10, 47, 111)),
-                    buildButton("()", Colors.white, Color.fromARGB(255, 10, 47, 111)),
-                    buildButton("%", Colors.white, Color.fromARGB(255, 10, 47, 111)),
-                    buildButton("÷", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    buildButton("C", Colors.white, Color.fromARGB(255, 10, 47, 111), height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("()", Colors.white, Color.fromARGB(255, 10, 47, 111), height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("%", Colors.white, Color.fromARGB(255, 10, 47, 111), height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("÷", Colors.white, Color.fromARGB(255, 10, 47, 111), height: 80.0, width: 80.0, fontSize: 24.0),
                   ]),
                   TableRow(children: [
-                    buildButton("7", Colors.white, Colors.black),
-                    buildButton("8", Colors.white, Colors.black),
-                    buildButton("9", Colors.white, Colors.black),
-                    buildButton("x", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    buildButton("7", Colors.white, Colors.black, height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("8", Colors.white, Colors.black, height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("9", Colors.white, Colors.black, height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("x", Colors.white, Color.fromARGB(255, 10, 47, 111), height: 80.0, width: 80.0, fontSize: 24.0),
                   ]),
                   TableRow(children: [
-                    buildButton("4", Colors.white, Colors.black),
-                    buildButton("5", Colors.white, Colors.black),
-                    buildButton("6", Colors.white, Colors.black),
-                    buildButton("-", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    buildButton("4", Colors.white, Colors.black, height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("5", Colors.white, Colors.black, height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("6", Colors.white, Colors.black, height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("-", Colors.white, Color.fromARGB(255, 10, 47, 111), height: 80.0, width: 80.0, fontSize: 24.0),
                   ]),
                   TableRow(children: [
-                    buildButton("1", Colors.white, Colors.black),
-                    buildButton("2", Colors.white, Colors.black),
-                    buildButton("3", Colors.white, Colors.black),
-                    buildButton("+", Colors.white, Color.fromARGB(255, 10, 47, 111)),
+                    buildButton("1", Colors.white, Colors.black,height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("2", Colors.white, Colors.black,height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("3", Colors.white, Colors.black,height: 80.0, width: 80.0, fontSize: 24.0),
+                    buildButton("+", Colors.white, Color.fromARGB(255, 10, 47, 111), height: 80.0, width: 80.0, fontSize: 24.0),
                   ]),
                   TableRow(children: [
                     buildButton("0", Colors.white, Colors.black),
@@ -259,23 +263,25 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
                 ],
               ),
             ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.fromLTRB(6, 0, 6, 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5.0),
-                  topRight: Radius.circular(5.0),
-                ),
-              ),
-              child: Center(
-                child: Image.network(
-                  'https://via.placeholder.com/468x60?text=Ad+Banner',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+           Container(
+  height: 50,
+  padding: const EdgeInsets.fromLTRB(6, 0, 6, 20),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(5.0),
+      topRight: Radius.circular(5.0),
+    ),
+  ),
+  child: Center(
+    child: Image.network(
+      'https://cms.dailysocial.id/wp-content/uploads/2023/01/iklan-mie-instan.jpg',
+      width: 400,
+      height: 180,
+      fit: BoxFit.fill, // Mengubah dari BoxFit.fill ke BoxFit.cover
+    ),
+  ),
+),
           ],
         ),
       ),

@@ -23,7 +23,7 @@ class _MataUangState extends State<MataUang> {
       } else {
         input += key;
       }
-      // Placeholder for actual conversion logic
+      // logic neng kene
       result = input;
     });
   }
